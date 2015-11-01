@@ -21,6 +21,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+
 import com.nostra13.universalimageloader.sample.R;
 import com.nostra13.universalimageloader.sample.fragment.ImageGridFragment;
 import com.nostra13.universalimageloader.sample.fragment.ImageListFragment;
@@ -40,7 +42,6 @@ public class ComplexImageActivity extends FragmentActivity {
 		setContentView(R.layout.ac_complex);
 
 		int pagerPosition = savedInstanceState == null ? 0 : savedInstanceState.getInt(STATE_POSITION);
-
 		pager = (ViewPager) findViewById(R.id.pager);
 		pager.setAdapter(new ImagePagerAdapter(getSupportFragmentManager()));
 		pager.setCurrentItem(pagerPosition);

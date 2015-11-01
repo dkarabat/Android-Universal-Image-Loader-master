@@ -28,9 +28,7 @@ import com.nostra13.universalimageloader.sample.fragment.ImagePagerFragment;
 import com.nostra13.universalimageloader.sample.retrogram.Instagram;
 import com.nostra13.universalimageloader.sample.util.GPSTracker;
 
-/**
- * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
- */
+
 public class SimpleImageActivity extends FragmentActivity {
 
 	@Override

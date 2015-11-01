@@ -82,7 +82,7 @@ public class ImageGalleryFragment extends BaseFragment {
 		gallery.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				startImagePagerActivity(position);
+				startImagePagerActivity(position, latitude, longitude);
 			}
 		});
 		latitude = getArguments().getDouble("lat");
@@ -164,10 +164,12 @@ public class ImageGalleryFragment extends BaseFragment {
 	}
 
 
-	private void startImagePagerActivity(int position) {
+	private void startImagePagerActivity(int position, Double latitude, Double longitude) {
 		Intent intent = new Intent(getActivity(), SimpleImageActivity.class);
 		intent.putExtra(Constants.Extra.FRAGMENT_INDEX, ImagePagerFragment.INDEX);
 		intent.putExtra(Constants.Extra.IMAGE_POSITION, position);
+		intent.putExtra("latitude", latitude);
+		intent.putExtra("longitude", longitude);
 		startActivity(intent);
 	}
 

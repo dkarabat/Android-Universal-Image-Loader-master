@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import retrofit.RestAdapter;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
@@ -80,13 +82,14 @@ public class ImagePagerFragment extends BaseFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		latitude = getArguments().getDouble("latitude");
+		longitude = getArguments().getDouble("longitude");
+		new AsyncHttpTask().execute();
 		View rootView = inflater.inflate(R.layout.fr_image_pager, container, false);
 		pager = (ViewPager) rootView.findViewById(R.id.pager);
 		pager.setAdapter(new ImageAdapter(getActivity()));
-		pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
-		latitude = getArguments().getDouble("lat");
-		longitude = getArguments().getDouble("lon");
-		new AsyncHttpTask().execute();
+//		imageAdapter.notifyDataSetChanged();
+//		pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
 		return rootView;
 	}
 
@@ -125,6 +128,8 @@ public class ImagePagerFragment extends BaseFragment {
 
 			if (result == 1) {
 				((ImageAdapter)pager.getAdapter()).setIMAGE_URLS(imagesList);
+				((ImageAdapter)pager.getAdapter()).notifyDataSetChanged();
+				pager.setCurrentItem(getArguments().getInt(Constants.Extra.IMAGE_POSITION, 0));
 			} else {
 //				Toast.makeText(GridViewActivity.this, "Failed1 to fetch data!", Toast.LENGTH_SHORT).show();
 			}
@@ -208,6 +213,7 @@ public class ImagePagerFragment extends BaseFragment {
 			View imageLayout = inflater.inflate(R.layout.item_pager_image, view, false);
 			assert imageLayout != null;
 			ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
+			PhotoViewAttacher mAttacher = new PhotoViewAttacher(imageView);
 			final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
 			ImageLoader.getInstance().displayImage(IMAGE_URLS.get(position), imageView, options, new SimpleImageLoadingListener() {
@@ -246,7 +252,7 @@ public class ImagePagerFragment extends BaseFragment {
 					spinner.setVisibility(View.GONE);
 				}
 			});
-
+			mAttacher.update();
 			view.addView(imageLayout, 0);
 			return imageLayout;
 		}

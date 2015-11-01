@@ -74,18 +74,20 @@ public class ImageGridFragment extends AbsListViewBaseFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		latitude = getArguments().getDouble("lat");
+		longitude = getArguments().getDouble("lon");
+		new AsyncHttpTask().execute();
 		View rootView = inflater.inflate(R.layout.fr_image_grid, container, false);
 		listView = (GridView) rootView.findViewById(R.id.grid);
 		((GridView) listView).setAdapter(new ImageAdapter(getActivity()));
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				startImagePagerActivity(position);
+				Log.i("pos - {}", String.valueOf(position));
+				startImagePagerActivity(position, latitude, longitude);
 			}
 		});
-		latitude = getArguments().getDouble("lat");
-		longitude = getArguments().getDouble("lon");
-		new AsyncHttpTask().execute();
+
 		return rootView;
 	}
 
@@ -163,10 +165,6 @@ public class ImageGridFragment extends AbsListViewBaseFragment {
 
 	private static class ImageAdapter extends BaseAdapter {
 
-		public ArrayList<String> getIMAGE_URLS() {
-			return IMAGE_URLS;
-		}
-
 		public void setIMAGE_URLS(ArrayList<String> IMAGE_URLS) {
 			this.IMAGE_URLS = IMAGE_URLS;
 			notifyDataSetChanged();
@@ -222,7 +220,7 @@ public class ImageGridFragment extends AbsListViewBaseFragment {
 			} else {
 				holder = (ViewHolder) view.getTag();
 			}
-
+            Log.i("position {}", String.valueOf(position));
 			ImageLoader.getInstance()
 					.displayImage(IMAGE_URLS.get(position), holder.imageView, options, new SimpleImageLoadingListener() {
 						@Override
